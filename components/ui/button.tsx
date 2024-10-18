@@ -5,7 +5,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex w-full items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
@@ -13,7 +13,7 @@ const buttonVariants = cva(
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90",
         outline:
-          "border border-black bg-background hover:bg-accent hover:text-accent-foreground",
+          "border bg-background hover:bg-accent hover:text-accent-foreground",
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
@@ -23,7 +23,7 @@ const buttonVariants = cva(
         default: "h-10 px-4 py-2",
         sm: "h-9 rounded-md px-3",
         lg: "h-11 rounded-md px-8",
-        icon: "h-10 w-10 rounded-full",
+        icon: "h-10 w-10 rounded-full border-black",
       },
     },
     defaultVariants: {
@@ -38,27 +38,28 @@ export interface ButtonProps
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
   shadowType?: "circle" | "square";
+  wFull?: boolean;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
-    { className, variant, size, asChild = false, shadowType, ...props },
+    { className, variant, size, asChild = false, shadowType, wFull, ...props },
     ref
   ) => {
     const Comp = asChild ? Slot : "button";
 
     const renderShadow = () => {
-      if (shadowType === "circle" && size === "icon") {
+      if (shadowType === "circle") {
         return (
           <div
-            className="absolute rounded-full border border-black h-10 w-10 bg-black/60 translate-y-1"
+            className="absolute rounded-full border-[1px] border-black h-10 w-10 bg-black/60 translate-y-1"
             style={{ zIndex: 0 }}
           />
         );
-      } else if (shadowType === "square" && size !== "icon") {
+      } else if (shadowType === "square") {
         return (
           <div
-            className="absolute rounded-md border border-black h-full w-full bg-black/70 translate-x-1 translate-y-1"
+            className="absolute rounded-md border-[1px] border-black h-full w-full bg-black/70 translate-x-1 translate-y-1"
             style={{ zIndex: 0 }}
           />
         );
@@ -67,7 +68,12 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     };
 
     return (
-      <div className="relative inline-flex items-center justify-center">
+      <div
+        className={cn(
+          "relative flex items-center justify-center",
+          wFull && "w-full"
+        )}
+      >
         {renderShadow()}
         <Comp
           className={cn(buttonVariants({ variant, size, className }))}
