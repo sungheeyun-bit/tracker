@@ -9,21 +9,22 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        default:
+          "bg-primary text-primary-foreground hover:bg-primary/90 dark:border-white",
         destructive:
-          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90 dark:border-white",
         outline:
-          "border bg-background hover:bg-accent hover:text-accent-foreground",
+          "border bg-background hover:bg-accent hover:text-accent-foreground dark:border-white",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
+          "bg-secondary text-secondary-foreground hover:bg-secondary/80 dark:border-white",
+        ghost: "hover:bg-accent hover:text-accent-foreground dark:border-white",
+        link: "text-primary underline-offset-4 hover:underline dark:border-white",
       },
       size: {
         default: "h-10 px-4 py-2",
         sm: "h-9 rounded-md px-3",
         lg: "h-11 rounded-md px-8",
-        icon: "h-10 w-10 rounded-full border-black",
+        icon: "h-10 w-10 rounded-full border-black dark:border-white",
       },
     },
     defaultVariants: {
@@ -59,7 +60,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       } else if (shadowType === "square") {
         return (
           <div
-            className="absolute rounded-md border-[1px] border-black h-full w-full bg-black/70 translate-x-1 translate-y-1"
+            className="absolute rounded-xl border-[1px] border-black h-full w-full bg-black/60 translate-x-1 translate-y-1"
             style={{ zIndex: 0 }}
           />
         );
