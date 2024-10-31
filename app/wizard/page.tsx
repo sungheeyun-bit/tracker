@@ -47,7 +47,7 @@ async function page() {
         </CardContent>
       </Card>
       <Separator />
-      <Button wFull shadowType="square" asChild>
+      <Button wFull asChild>
         <Link href={"/"}>완료! 대시보드로 이동하기</Link>
       </Button>
 
