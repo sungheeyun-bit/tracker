@@ -4,6 +4,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import React from "react";
 import CreateTransactionDialog from "./_components/CreateTransactionDialog";
+import Overview from "./_components/Overview";
 
 async function page() {
   const user = await currentUser();
@@ -30,11 +31,7 @@ async function page() {
           <div className="flex items-center gap-3">
             <CreateTransactionDialog
               trigger={
-                <Button
-                  variant={"outline"}
-                  className="border-black rounded-xl bg-incomeColor"
-                  shadowType="square"
-                >
+                <Button variant={"outline"} shadowType={"sm-shadow"}>
                   새 수입 🤑
                 </Button>
               }
@@ -43,11 +40,7 @@ async function page() {
 
             <CreateTransactionDialog
               trigger={
-                <Button
-                  variant={"outline"}
-                  className="border-black rounded-xl bg-expenseColor"
-                  shadowType="square"
-                >
+                <Button variant={"outline"} shadowType={"sm-shadow"}>
                   새 지출 😤
                 </Button>
               }
@@ -56,6 +49,7 @@ async function page() {
           </div>
         </div>
       </div>
+      <Overview userSettings={userSettings} />
     </div>
   );
 }
