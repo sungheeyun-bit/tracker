@@ -14,7 +14,7 @@ const buttonVariants = cva(
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90 dark:border-white",
         outline:
-          "border bg-background hover:bg-accent hover:text-accent-foreground dark:border-white",
+          "border-2 border-black/80 bg-background hover:bg-accent hover:text-accent-foreground dark:border-white",
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-secondary/80 dark:border-white",
         ghost: "hover:bg-accent hover:text-accent-foreground dark:border-white",
@@ -23,8 +23,8 @@ const buttonVariants = cva(
       size: {
         default: "h-10 px-4 py-2",
         sm: "h-9 rounded-md px-3",
-        lg: "h-11 rounded-md px-8",
-        icon: "h-10 w-10 rounded-full border-black dark:border-white",
+        lg: "h-11 rounded-2xl px-8",
+        icon: "h-10 w-10 rounded-full",
       },
     },
     defaultVariants: {
@@ -38,7 +38,7 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
-  shadowType?: "circle" | "square";
+  shadowType?: "circle" | "lg-shadow" | "sm-shadow";
   wFull?: boolean;
 }
 
@@ -53,14 +53,21 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       if (shadowType === "circle") {
         return (
           <div
-            className="absolute rounded-full border-[1px] border-black h-10 w-10 bg-black/60 translate-y-1"
+            className="absolute border-2 rounded-full border-black h-10 w-10 bg-black/60 translate-y-1"
             style={{ zIndex: 0 }}
           />
         );
-      } else if (shadowType === "square") {
+      } else if (shadowType === "lg-shadow") {
         return (
           <div
-            className="absolute rounded-xl border-[1px] border-black h-full w-full bg-black/60 translate-x-1 translate-y-1"
+            className="absolute border-2 rounded-2xl border-black h-full w-full bg-black/60 translate-y-[5px]"
+            style={{ zIndex: 0 }}
+          />
+        );
+      } else if (shadowType === "sm-shadow") {
+        return (
+          <div
+            className="absolute border-2 rounded-md border-black h-full w-full bg-black/60 translate-y-1 translate-x-1"
             style={{ zIndex: 0 }}
           />
         );
