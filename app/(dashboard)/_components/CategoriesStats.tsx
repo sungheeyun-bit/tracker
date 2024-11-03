@@ -72,7 +72,7 @@ function CategoriesCard({
   );
 
   return (
-    <div className="relative h-80 w-full">
+    <div className="relative h-80 w-full col-span-6">
       <div className="absolute inset-0 translate-x-3 translate-y-3 rounded-xl bg-black/30" />
 
       <Card className="relative h-80 w-full bg-[#1e1f21] rounded-xl before:border-none after:border-none outline-none border-none">
