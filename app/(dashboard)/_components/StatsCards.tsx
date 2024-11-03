@@ -70,7 +70,7 @@ function StatsCards({ from, to, userSettings }: Props) {
           formatter={formatter}
           value={balance}
           title="잔액"
-          background="bg-[#e6d471]"
+          background="bg-balanceColor"
           icon={
             <Wallet
               className="h-12 w-12 items-center rounded-lg p-2 text-black bg-[#bcad56]"
