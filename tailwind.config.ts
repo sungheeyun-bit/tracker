@@ -14,6 +14,7 @@ const config: Config = {
         foreground: "hsl(var(--foreground))",
         incomeColor: "#a1e86d",
         expenseColor: "#a4a7f6",
+        balanceColor: "#e6d471",
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
