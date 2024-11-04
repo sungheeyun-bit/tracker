@@ -9,7 +9,6 @@ import { Period, Timeframe } from "@/lib/types";
 import { UserSettings } from "@prisma/client";
 import React, { useCallback, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-
 import {
   Bar,
   BarChart,
@@ -21,6 +20,7 @@ import {
 } from "recharts";
 import { cn } from "@/lib/utils";
 import CountUp from "react-countup";
+import { GetHistoryDataResponseType } from "@/app/api/history-data/route";
 
 function History({ userSettings }: { userSettings: UserSettings }) {
   const [timeframe, setTimeframe] = useState<Timeframe>("month");
@@ -33,7 +33,7 @@ function History({ userSettings }: { userSettings: UserSettings }) {
     return GetFormatterForCurrency(userSettings.currency);
   }, [userSettings.currency]);
 
-  const historyDataQuery = useQuery({
+  const historyDataQuery = useQuery<GetHistoryDataResponseType>({
     queryKey: ["overview", "history", timeframe, period],
     queryFn: () =>
       fetch(
@@ -77,13 +77,9 @@ function History({ userSettings }: { userSettings: UserSettings }) {
         </CardHeader>
         <CardContent>
           <SkeletonWrapper isLoading={historyDataQuery.isFetching}>
-            {dataAvailable && (
+            {dataAvailable ? (
               <ResponsiveContainer width={"100%"} height={300}>
-                <BarChart
-                  height={300}
-                  data={historyDataQuery.data}
-                  barCategoryGap={5}
-                >
+                <BarChart data={historyDataQuery.data} barCategoryGap={5}>
                   <CartesianGrid
                     strokeDasharray="5 5"
                     strokeOpacity={"0.2"}
@@ -95,7 +91,7 @@ function History({ userSettings }: { userSettings: UserSettings }) {
                     tickLine={false}
                     axisLine={false}
                     padding={{ left: 5, right: 5 }}
-                    dataKey={(data) => {
+                    dataKey={(data: GetHistoryDataResponseType[number]) => {
                       const { year, month, day } = data;
                       const date = new Date(year, month, day || 1);
                       if (timeframe === "year") {
@@ -116,29 +112,23 @@ function History({ userSettings }: { userSettings: UserSettings }) {
                   />
                   <Bar
                     dataKey={"income"}
-                    label="수입"
                     fill="#a1e86d"
                     radius={4}
                     className="cursor-pointer"
                   />
                   <Bar
                     dataKey={"expense"}
-                    label="지출"
                     fill="#a4a7f6"
                     radius={4}
                     className="cursor-pointer"
                   />
                   <Tooltip
                     cursor={{ opacity: 0.1 }}
-                    content={(props) => (
-                      <CustomTooltip formatter={formatter} {...props} />
-                    )}
+                    content={<CustomTooltip formatter={formatter} />}
                   />
                 </BarChart>
               </ResponsiveContainer>
-            )}
-
-            {!dataAvailable && (
+            ) : (
               <Card className="flex h-[300px] flex-col items-center justify-center bg-background">
                 선택된 기간에 대한 데이터가 없습니다.
                 <p className="text-sm text-muted-foreground">
@@ -155,14 +145,13 @@ function History({ userSettings }: { userSettings: UserSettings }) {
 
 export default History;
 
-type PayloadItem = {
-  payload: {
-    expense: number;
-    income: number;
-  };
-};
+interface CustomTooltipProps {
+  active?: boolean;
+  payload?: { payload: GetHistoryDataResponseType[number] }[];
+  formatter: Intl.NumberFormat;
+}
 
-function CustomTooltip({ active, payload, formatter }: any) {
+function CustomTooltip({ active, payload, formatter }: CustomTooltipProps) {
   if (!active || !payload || payload.length === 0) return null;
 
   const data = payload[0].payload;
@@ -177,7 +166,6 @@ function CustomTooltip({ active, payload, formatter }: any) {
         bgColor="bg-expenseColor"
         textColor="text-expenseColor"
       />
-
       <TooltipRow
         formatter={formatter}
         label="수입"
@@ -196,23 +184,23 @@ function CustomTooltip({ active, payload, formatter }: any) {
   );
 }
 
+interface TooltipRowProps {
+  label: string;
+  value: number;
+  bgColor: string;
+  textColor: string;
+  formatter: Intl.NumberFormat;
+}
+
 function TooltipRow({
   label,
   value,
   bgColor,
   textColor,
   formatter,
-}: {
-  label: string;
-  textColor: string;
-  bgColor: string;
-  value: number;
-  formatter: Intl.NumberFormat;
-}) {
+}: TooltipRowProps) {
   const formattingFn = useCallback(
-    (value: number) => {
-      return formatter.format(value);
-    },
+    (value: number) => formatter.format(value),
     [formatter]
   );
 
