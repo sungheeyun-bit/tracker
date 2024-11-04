@@ -71,7 +71,7 @@ function CreateCategoryDialog({ type, successCallback, trigger }: Props) {
         type,
       });
 
-      toast.success(`Category ${data.name} created successfully`, {
+      toast.success(`카테고리 '${data.name}'가 성공적으로 생성되었습니다`, {
         id: "create-category",
       });
 
@@ -84,7 +84,7 @@ function CreateCategoryDialog({ type, successCallback, trigger }: Props) {
       setOpen((prev) => !prev);
     },
     onError: () => {
-      toast.error("Someting went wrong.", {
+      toast.error("오류가 발생했습니다. 다시 시도해주세요.", {
         id: "create-category",
       });
     },
@@ -92,7 +92,7 @@ function CreateCategoryDialog({ type, successCallback, trigger }: Props) {
 
   const onSubmit = useCallback(
     (values: CreateCategorySchemaType) => {
-      toast.loading("Creating category...", {
+      toast.loading("카테고리 생성 중...", {
         id: "create-category",
       });
       mutate(values);
@@ -110,27 +110,25 @@ function CreateCategoryDialog({ type, successCallback, trigger }: Props) {
             variant={"ghost"}
             className="flex border-separate items-center justify-start rounded-none border-b px-3 py-3 text-muted-foreground"
           >
-            <PlusSquare className="mr-2 h-4 w-4" />
-            Create new
+            <PlusSquare className="mr-2 h-4 w-4" />새 카테고리 만들기
           </Button>
         )}
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            Create
             <span
               className={cn(
                 "m-1",
                 type === "income" ? "text-emerald-500" : "text-red-500"
               )}
             >
-              {type}
+              {type === "income" ? "수입" : "지출"}
             </span>
-            category
+            카테고리 만들기
           </DialogTitle>
           <DialogDescription>
-            Categories are used to group your transaction.
+            카테고리를 만들어 거래 내역을 그룹화할 수 있습니다.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -140,12 +138,15 @@ function CreateCategoryDialog({ type, successCallback, trigger }: Props) {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>카테고리 이름</FormLabel>
                   <FormControl>
-                    <Input placeholder="Category" {...field} />
+                    <Input
+                      placeholder="카테고리 이름을 입력하세요"
+                      {...field}
+                    />
                   </FormControl>
                   <FormDescription>
-                    This is how your category will appear in the app
+                    앱에서 카테고리가 표시될 이름입니다.
                   </FormDescription>
                 </FormItem>
               )}
@@ -156,7 +157,7 @@ function CreateCategoryDialog({ type, successCallback, trigger }: Props) {
               name="icon"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Icon</FormLabel>
+                  <FormLabel>아이콘 선택</FormLabel>
                   <FormControl>
                     <Popover>
                       <PopoverTrigger asChild>
@@ -170,14 +171,14 @@ function CreateCategoryDialog({ type, successCallback, trigger }: Props) {
                                 {field.value}
                               </span>
                               <p className="text-xs text-muted-foreground">
-                                Click to change
+                                클릭하여 변경하기
                               </p>
                             </div>
                           ) : (
                             <div className="flex flex-col items-center gap-2">
                               <CircleOff className="h-[48px] w-[48px]" />
                               <p className="text-xs text-muted-foreground">
-                                Click to select
+                                클릭하여 선택하기
                               </p>
                             </div>
                           )}
@@ -195,7 +196,7 @@ function CreateCategoryDialog({ type, successCallback, trigger }: Props) {
                     </Popover>
                   </FormControl>
                   <FormDescription>
-                    This is how your category will appear in the app
+                    앱에서 카테고리가 표시될 아이콘입니다.
                   </FormDescription>
                 </FormItem>
               )}
@@ -212,12 +213,11 @@ function CreateCategoryDialog({ type, successCallback, trigger }: Props) {
                 form.reset();
               }}
             >
-              Cancel
+              취소
             </Button>
           </DialogClose>
           <Button onClick={form.handleSubmit(onSubmit)} disabled={isPending}>
-            {!isPending && "Create"}
-            {isPending && <Loader2 className="animate-spin" />}
+            {!isPending ? "만들기" : <Loader2 className="animate-spin" />}
           </Button>
         </DialogFooter>
       </DialogContent>
