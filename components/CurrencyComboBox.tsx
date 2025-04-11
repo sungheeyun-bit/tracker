@@ -71,13 +71,15 @@ export function CurrencyComboBox() {
         return;
       }
 
+      if (currency.value === selectedOption?.value) return;
+
       toast.loading("통화 업데이트 중...", {
         id: "update-currency",
       });
 
       mutation.mutate(currency.value);
     },
-    [mutation]
+    [mutation, selectedOption]
   );
 
   if (isDesktop) {
